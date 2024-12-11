@@ -10,7 +10,11 @@ source "$SCRIPT_DIR/credentials.txt"
 TOKEN_URL="https://accounts.spotify.com/api/token"
 
 # Generate base64-encoded credentials
-BASIC_AUTH=$(echo -n "$CLIENT_ID:$CLIENT_SECRET" | base64)
+BASIC_AUTH=$(echo -n "$CLIENT_ID:$CLIENT_SECRET" | base64 | tr -d '\n')
+
+# Display the curl command being executed
+echo "Executing curl command:"
+echo "curl -s -X POST -H \"Content-Type: application/x-www-form-urlencoded\" -H \"Authorization: Basic $BASIC_AUTH\" -d \"grant_type=refresh_token\" -d \"refresh_token=$REFRESH_TOKEN\" $TOKEN_URL"
 
 # Request a new access token
 RESPONSE=$(curl -s -X POST -H "Content-Type: application/x-www-form-urlencoded" \
@@ -27,5 +31,5 @@ if [ "$ACCESS_TOKEN" != "null" ]; then
     echo "$ACCESS_TOKEN" > "$SCRIPT_DIR/access_token.txt"
     echo "Token refreshed successfully: $ACCESS_TOKEN"
 else
-    echo "Failed to refresh token: $RESPONSE"
+    echo "Failed to refresh token. Raw response: $RESPONSE"
 fi
