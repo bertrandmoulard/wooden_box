@@ -83,7 +83,7 @@ while True:
             decoded_text = None
 
         # Delay before the next scan
-        time.sleep(2)
+        time.sleep(1)
 
     except Exception as e:
         print(f"Error reading tag: {e}")

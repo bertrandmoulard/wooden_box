@@ -10,8 +10,8 @@ ACCESS_TOKEN = File.read(File.join(SCRIPT_DIR, 'access_token.txt')).strip
 # Spotify API Base URL
 BASE_URL = 'https://api.spotify.com/v1/me/player'
 
-# Function to send a request to the Spotify API
-def send_request(method, endpoint, data = nil)
+# Function to send a request to the Spotify API with retry logic
+def send_request(method, endpoint, data = nil, attempt = 1)
   uri = URI("#{BASE_URL}/#{endpoint}")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
@@ -31,6 +31,11 @@ def send_request(method, endpoint, data = nil)
 
   puts "Executing: #{method} #{uri}"
   puts "Response: #{response.code} #{response.body}" unless response.body.nil?
+
+  if response.code.to_i >= 400 && attempt < 2
+    puts "Error encountered. Retrying request... (Attempt #{attempt + 1})"
+    return send_request(method, endpoint, data, attempt + 1)
+  end
 
   response
 end
