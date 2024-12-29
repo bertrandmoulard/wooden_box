@@ -1,0 +1,14 @@
+# Copy this file to /etc/systemd/system/read_nfc.service
+[Unit]
+Description=Read NFC Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/bertrand/workspace/wooden_box/read_nfc.py
+WorkingDirectory=/home/bertrand/workspace/wooden_box
+Restart=always
+User=bertrand
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target

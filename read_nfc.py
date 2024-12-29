@@ -24,7 +24,7 @@ while True:
         # Wait for an NFC card
         uid = pn532.read_passive_target(timeout=1)
         if uid is not None:
-            print(f"Tag detected! UID: {uid.hex()}")
+            #  print(f"Tag detected! UID: {uid.hex()}")
 
             # Read raw data from memory blocks
             raw_data = b""
@@ -57,15 +57,16 @@ while True:
                     new_decoded_text = ndef_payload.decode('utf-8')
                     if decoded_text != new_decoded_text:
                         decoded_text = new_decoded_text
-                        print(f"New Tag Content: {decoded_text}")
+                        #  print(f"New Tag Content: {decoded_text}")
 
                         # Command to run
                         command = ["ruby", "wooden_box.rb", "play", decoded_text]
 
                         # Run the command
                         try:
-                            result = subprocess.run(command, check=True, text=True, capture_output=True)
-                            print(f"Command Output:\n{result.stdout}")
+                            #  result = subprocess.run(command, check=True, text=True, capture_output=True)
+                            print(f"Playing album {decoded_text}")
+                            #  print(f"Command Output:\n{result.stdout}")
                         except subprocess.CalledProcessError as e:
                             print(f"Command failed with error:\n{e.stderr}")
 
@@ -77,7 +78,7 @@ while True:
                 print(f"Error manually decoding the tag content: {e}")
 
         else:
-            print("No tag detected.")
+            #  print("No tag detected.")
             if decoded_text != None:
                 print("Stop playing album")
             decoded_text = None
