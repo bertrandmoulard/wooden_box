@@ -11,12 +11,12 @@ pn532 = PN532_I2C(i2c, debug=False)
 
 # Get firmware version to verify the connection
 ic, ver, rev, support = pn532.firmware_version
-print(f"Found PN532 with firmware version {ver}.{rev}")
+#  print(f"Found PN532 with firmware version {ver}.{rev}")
 
 # Configure the PN532 to read MiFare cards
 pn532.SAM_configuration()
 
-print("Listening for NFC tags...")
+#  print("Listening for NFC tags...")
 decoded_text = None
 
 while True:
@@ -36,7 +36,7 @@ while True:
                     break
 
             # Debug: Print raw data
-            print(f"Raw Data (Hex): {raw_data.hex()}")
+            #  print(f"Raw Data (Hex): {raw_data.hex()}")
 
             # Manually decode the custom-written content
             try:
@@ -50,14 +50,12 @@ while True:
                 ndef_length = raw_data[ndef_start + 1]
                 ndef_payload = raw_data[ndef_start + 2:ndef_start + 2 + ndef_length]
 
-                print(f"NDEF Payload (Hex): {ndef_payload.hex()}")
+                #  print(f"NDEF Payload (Hex): {ndef_payload.hex()}")
 
                 # Decode the payload as a string
                 try:
                     new_decoded_text = ndef_payload.decode('utf-8')
-                    if decoded_text == new_decoded_text:
-                        print("Same content")
-                    else:
+                    if decoded_text != new_decoded_text:
                         decoded_text = new_decoded_text
                         print(f"New Tag Content: {decoded_text}")
 
@@ -80,6 +78,8 @@ while True:
 
         else:
             print("No tag detected.")
+            if decoded_text != None:
+                print("Stop playing album")
             decoded_text = None
 
         # Delay before the next scan
