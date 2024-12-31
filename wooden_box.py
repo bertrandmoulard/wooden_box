@@ -12,6 +12,7 @@ with open(os.path.join(SCRIPT_DIR, 'access_token.txt'), 'r') as file:
 
 # Spotify API Base URL
 BASE_URL = 'https://api.spotify.com/v1/me/player'
+device_name = "Wooden Box"
 
 # Function to send a request to the Spotify API with retry logic
 def send_request(method, endpoint, data=None, attempt=1):
@@ -76,23 +77,19 @@ def activate_device(device_name):
 
 # Functions for playback control
 def play_uri(uri):
-    activate_device("Bertie's RaspberryPI")
+    activate_device(device_name)
     send_request('PUT', 'play', {"context_uri": uri})
 
 def resume_playback():
-    activate_device("Bertie's RaspberryPI")
     send_request('PUT', 'play')
 
 def pause_playback():
-    activate_device("Bertie's RaspberryPI")
     send_request('PUT', 'pause')
 
 def previous_track():
-    activate_device("Bertie's RaspberryPI")
     send_request('POST', 'previous')
 
 def next_track():
-    activate_device("Bertie's RaspberryPI")
     send_request('POST', 'next')
 
 # Main logic to handle commands
@@ -118,7 +115,7 @@ def main():
     elif command == 'list':
         list_devices()
     elif command == 'activate':
-        activate_device("Bertie's RaspberryPI")
+        activate_device(device_name)
     else:
         print('Usage: python wooden_box.py {play <spotify_uri>|play|pause|previous|next|list}')
 

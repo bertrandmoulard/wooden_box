@@ -1,0 +1,14 @@
+[Unit]
+Description=A Spotify client running on Raspberry Pi
+After=network.target
+
+[Service]
+User=bertrand
+Group=bertrand
+ExecStart=/usr/bin/spotifyd --no-daemon --config-path /etc/spotifyd.conf
+Restart=always
+RestartSec=5
+Environment="PULSE_RUNTIME_PATH=/run/user/1000/pulse/"
+
+[Install]
+WantedBy=multi-user.target
