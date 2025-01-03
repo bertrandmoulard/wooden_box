@@ -79,17 +79,17 @@ while True:
 
         else:
             #  print("No tag detected.")
-            if decoded_text != None:
-                # Command to run
-                command = ["python3", "wooden_box.py", "pause", decoded_text]
+            #  if decoded_text != None:
+                #  # Command to run
+                #  command = ["python3", "wooden_box.py", "pause", decoded_text]
 
-                # Run the command
-                try:
-                    result = subprocess.run(command, check=True, text=True, capture_output=True)
-                    print(f"Pausing")
-                    print(f"Command Output:\n{result.stdout}")
-                except subprocess.CalledProcessError as e:
-                    print(f"Command failed with error:\n{e.stderr}")
+                #  # Run the command
+                #  try:
+                    #  result = subprocess.run(command, check=True, text=True, capture_output=True)
+                    #  print(f"Pausing")
+                    #  print(f"Command Output:\n{result.stdout}")
+                #  except subprocess.CalledProcessError as e:
+                    #  print(f"Command failed with error:\n{e.stderr}")
             decoded_text = None
 
         # Delay before the next scan

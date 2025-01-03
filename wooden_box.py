@@ -75,16 +75,31 @@ def activate_device(device_name):
 
     return device_id
 
-# Functions for playback control
+# Function to toggle play/pause
+def toggle_play_pause():
+    # Get current playback state
+    response = send_request('GET', '')
+    if response.status_code == 204:
+        print("No active device found.")
+        activate_device(device_name)
+        send_request('PUT', 'play')
+        print("Playback started.")
+        return
+
+    playback_state = response.json()
+    is_playing = playback_state.get("is_playing", False)
+
+    if is_playing:
+        send_request('PUT', 'pause')
+        print("Playback paused.")
+    else:
+        send_request('PUT', 'play')
+        print("Playback started.")
+
+# Function for other playback controls
 def play_uri(uri):
     activate_device(device_name)
     send_request('PUT', 'play', {"context_uri": uri})
-
-def resume_playback():
-    send_request('PUT', 'play')
-
-def pause_playback():
-    send_request('PUT', 'pause')
 
 def previous_track():
     send_request('POST', 'previous')
@@ -95,7 +110,7 @@ def next_track():
 # Main logic to handle commands
 def main():
     if len(sys.argv) < 2:
-        print('Usage: python wooden_box.py {play <spotify_uri>|play|pause|previous|next|list}')
+        print('Usage: python wooden_box.py {play <spotify_uri>|toggle|previous|next|list}')
         return
 
     command = sys.argv[1]
@@ -105,9 +120,11 @@ def main():
         if argument:
             play_uri(argument)
         else:
-            resume_playback()
+            toggle_play_pause()
     elif command == 'pause':
-        pause_playback()
+        send_request('PUT', 'pause')
+    elif command == 'toggle':
+        toggle_play_pause()
     elif command == 'previous':
         previous_track()
     elif command == 'next':
@@ -117,7 +134,7 @@ def main():
     elif command == 'activate':
         activate_device(device_name)
     else:
-        print('Usage: python wooden_box.py {play <spotify_uri>|play|pause|previous|next|list}')
+        print('Usage: python wooden_box.py {play <spotify_uri>|toggle|previous|next|list}')
 
 if __name__ == '__main__':
     main()
